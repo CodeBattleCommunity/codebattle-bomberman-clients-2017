@@ -42,8 +42,8 @@ class GameClient
   attr_reader :playerX
   attr_reader :playerY
 
-  def initialize(server, userEmail, userPassword = nil)
-    @path = "ws://" + server + "/codenjoy-contest/ws?user=" + userEmail + (userPassword != nil ? ("&pwd=" + userPassword) : "")
+  def initialize(server, userEmail, code)
+    @path = "ws://" + server + "/codenjoy-contest/ws?user=" + userEmail + "&code=" + code
   end
 
   def run(on_turn)
@@ -51,7 +51,7 @@ class GameClient
       @ws = WebSocket::EventMachine::Client.connect(:uri => @path)
       
       @ws.onopen do
-        puts "Connected"
+        puts "Connection established"
       end
     
       @ws.onmessage do |message, type|
@@ -85,28 +85,35 @@ class GameClient
       end
     end
   end
+
+  def send(msg = "")
+    puts "Sending: #{msg}"
+    @ws.send msg
+  end
   
   def up(action = BombAction::None)
-    @ws.send "#{action == BombAction::BeforeTurn ? "ACT," : ""}UP#{action == BombAction::AfterTurn ? ",ACT" : ""}"
+    send "#{action == BombAction::BeforeTurn ? "ACT," : ""}UP#{action == BombAction::AfterTurn ? ",ACT" : ""}"
   end
   
   def down(action = BombAction::None)
-    @ws.send "#{action == BombAction::BeforeTurn ? "ACT," : ""}DOWN#{action == BombAction::AfterTurn ? ",ACT" : ""}"
+    send "#{action == BombAction::BeforeTurn ? "ACT," : ""}DOWN#{action == BombAction::AfterTurn ? ",ACT" : ""}"
   end
   
   def right(action = BombAction::None)
-    @ws.send "#{action == BombAction::BeforeTurn ? "ACT," : ""}RIGHT#{action == BombAction::AfterTurn ? ",ACT" : ""}"
+    send "#{action == BombAction::BeforeTurn ? "ACT," : ""}RIGHT#{action == BombAction::AfterTurn ? ",ACT" : ""}"
   end
   
   def left(action = BombAction::None)
-    @ws.send "#{action == BombAction::BeforeTurn ? "ACT," : ""}LEFT#{action == BombAction::AfterTurn ? ",ACT" : ""}"
+    send "#{action == BombAction::BeforeTurn ? "ACT," : ""}LEFT#{action == BombAction::AfterTurn ? ",ACT" : ""}"
   end
   
   def act
-    @ws.send "ACT"
+    send "ACT"
   end
   
   def blank
-    @ws.send ""
+    send ""
   end
+
+  private :send
 end

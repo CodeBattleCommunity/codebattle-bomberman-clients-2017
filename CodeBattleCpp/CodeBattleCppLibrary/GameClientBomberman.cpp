@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-GameClientBomberman::GameClientBomberman(std::string _server, std::string _userEmail, std::string _userPassword)
+GameClientBomberman::GameClientBomberman(std::string _server, std::string _userEmail, std::string _code)
 {
 	map = nullptr;
 	map_size = 0;
 
-	path = "ws://" + _server + "/codenjoy-contest/ws?user=" + _userEmail + (_userPassword.empty() ? "" : "&pwd=" + _userPassword);
+	path = "ws://" + _server + "/codenjoy-contest/ws?user=" + _userEmail + "&code=" + _code;
 
 	is_running = false;
 }
@@ -31,6 +31,8 @@ void GameClientBomberman::update_func(std::function<void()> _message_handler)
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData))
 		throw new std::exception("WSAStartup Failed.\n");
+	else
+		std::cout << "Connection established" << std::endl;
 #endif
 
 	web_socket = easywsclient::WebSocket::from_url(path);

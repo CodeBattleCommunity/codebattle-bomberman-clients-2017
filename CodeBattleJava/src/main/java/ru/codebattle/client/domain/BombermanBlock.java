@@ -1,7 +1,7 @@
-package clientlib;
+package ru.codebattle.client.domain;
 
 
-public enum Elements {
+public enum BombermanBlock {
     /// This is your Bomberman
     BOMBERMAN('☺'),             // this is what he usually looks like
     BOMB_BOMBERMAN('☻'),        // this is if he is sitting on own bomb
@@ -42,7 +42,7 @@ public enum Elements {
 
     final char ch;
 
-    Elements(char ch) {
+    BombermanBlock(char ch) {
         this.ch = ch;
     }
 
@@ -55,8 +55,8 @@ public enum Elements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    public static BombermanBlock valueOf(char ch) {
+        for (BombermanBlock el : BombermanBlock.values()) {
             if (el.ch == ch) {
                 return el;
             }
@@ -66,12 +66,6 @@ public enum Elements {
 
     public boolean isBomb() {
         return BOMBS.indexOf(ch) != -1;
-    }
-
-    public boolean isBomberman() {
-        return this == Elements.BOMBERMAN ||
-               this == Elements.BOMB_BOMBERMAN ||
-               this == Elements.DEAD_BOMBERMAN;
     }
 
 }

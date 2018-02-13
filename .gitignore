@@ -27,3 +27,5 @@ CodeBattleJava/.idea
 /CodeBattleCpp/CodeBattleCppLibrary/x64/Release
 /CodeBattleCpp/x64/Debug
 /CodeBattleCpp/x64/Release
+*.lock
+.idea

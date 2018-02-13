@@ -13,14 +13,18 @@ namespace CodeBattleNetLibrary
 		public int PlayerX { get; private set; }
 		public int PlayerY { get; private set; }
 
-		public GameClientBomberman(string server, string userEmail, string userPassword = null)
+		public GameClientBomberman(string server, string userEmail, string code)
 		{
 			MapSize = 0;
 
 			_socket =
 				new WebSocket(
-					$"ws://{server}/codenjoy-contest/ws?user={userEmail}{(string.IsNullOrEmpty(userPassword) ? string.Empty : $"&pwd={userPassword}")}");
-			_socket.MessageReceived += (s, e) => { ParseField(e.Message); };
+					$"ws://{server}/codenjoy-contest/ws?user={userEmail}&code={code}");
+            _socket.Opened += new EventHandler(onOpened);
+            _socket.Error += new EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(onError);
+            _socket.Closed += new EventHandler(onClose);
+            _socket.MessageReceived += (s, e) => { ParseField(e.Message); };
+           
 		}
 
 		public void Run(Action handler)
@@ -31,40 +35,40 @@ namespace CodeBattleNetLibrary
 
 		public void Up(BombAction bombAction = BombAction.None)
 		{
-			_socket.Send(
+			send(
 				$"{(bombAction == BombAction.BeforeTurn ? "ACT," : "")}UP{(bombAction == BombAction.AfterTurn ? ",ACT" : "")}"
 				);
 		}
 
 		public void Down(BombAction bombAction = BombAction.None)
 		{
-			_socket.Send(
+            send(
 				$"{(bombAction == BombAction.BeforeTurn ? "ACT," : "")}DOWN{(bombAction == BombAction.AfterTurn ? ",ACT" : "")}"
 				);
 		}
 
 		public void Right(BombAction bombAction = BombAction.None)
 		{
-			_socket.Send(
+            send(
 				$"{(bombAction == BombAction.BeforeTurn ? "ACT," : "")}RIGHT{(bombAction == BombAction.AfterTurn ? ",ACT" : "")}"
 				);
 		}
 
 		public void Left(BombAction bombAction = BombAction.None)
 		{
-			_socket.Send(
+            send(
 				$"{(bombAction == BombAction.BeforeTurn ? "ACT," : "")}LEFT{(bombAction == BombAction.AfterTurn ? ",ACT" : "")}"
 				);
 		}
 
 		public void Act()
 		{
-			_socket.Send("ACT");
+            send("ACT");
 		}
 
 		public void Blank()
 		{
-			_socket.Send("");
+            send("");
 		}
 
 		private void ParseField(string rawField)
@@ -96,6 +100,27 @@ namespace CodeBattleNetLibrary
 
 			OnUpdate?.Invoke();
 		}
+
+        private void onOpened(object sender, EventArgs e)
+        {
+            Console.WriteLine("Connection established");
+        }
+
+        private void onError(object sender, EventArgs e)
+        {
+            Console.WriteLine("### error ###\n" + e.ToString());
+        }
+
+        private void onClose(object sender, EventArgs e)
+        {
+            Console.WriteLine("### disconnected ###");
+        }
+
+        private void send(string msg)
+        {
+            Console.WriteLine($"Sending: {msg}");
+            _socket.Send(msg);
+        }
 
 		protected bool IsPlayerCoords(BombermanBlocks block) => block == BombermanBlocks.Bomberman ||
 		                                                        block == BombermanBlocks.BombBomberman ||

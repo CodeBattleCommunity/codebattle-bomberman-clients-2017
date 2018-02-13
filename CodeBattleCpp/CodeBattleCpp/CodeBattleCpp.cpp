@@ -21,7 +21,7 @@ bool is_block(BombermanBlocks _block)
 void main()
 {
 	srand(time(0));
-	GameClientBomberman *gcb = new GameClientBomberman("52.232.32.105:8080", "ab@c.ru", "123");
+	GameClientBomberman *gcb = new GameClientBomberman("epruizhw0172.moscow.epam.com:8081", "cpp0@mail.org", "16669117122025896294");
 	gcb->Run([&]()
 	{
 		BombermanBlocks **map = gcb->get_map();

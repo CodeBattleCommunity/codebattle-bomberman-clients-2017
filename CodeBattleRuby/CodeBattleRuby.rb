@@ -49,5 +49,5 @@ def turn(gcb)
   end
 end
 
-w = GameClient.new("52.232.32.105:8080", "ab@c.ru", "123")
+w = GameClient.new("epruizhw0172.moscow.epam.com:8080", "bomber_rb@mail.org", "11616684031277868420")
 w.run(method(:turn))

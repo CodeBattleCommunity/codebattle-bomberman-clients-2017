@@ -9,6 +9,7 @@
 #endif
 #include <assert.h>
 #include <stdio.h>
+#include <iostream>
 #include <string>
 #include <memory>
 
@@ -34,25 +35,32 @@ public:
 	void Run(std::function<void()> _message_handler);
 	void Up(BombAction _action = BombAction::None)
 	{
-		web_socket->send(std::string(_action == BombAction::BeforeTurn ? "ACT," : "") + "UP" + std::string(_action == BombAction::AfterTurn ? ",ACT" : ""));
+		send(std::string(_action == BombAction::BeforeTurn ? "ACT," : "") + "UP" + std::string(_action == BombAction::AfterTurn ? ",ACT" : ""));
 	}
 	void Down(BombAction _action = BombAction::None)
 	{
-		web_socket->send(std::string(_action == BombAction::BeforeTurn ? "ACT," : "") + "DOWN" + std::string(_action == BombAction::AfterTurn ? ",ACT" : ""));
+		send(std::string(_action == BombAction::BeforeTurn ? "ACT," : "") + "DOWN" + std::string(_action == BombAction::AfterTurn ? ",ACT" : ""));
 	}
 	void Right(BombAction _action = BombAction::None)
 	{
-		web_socket->send(std::string(_action == BombAction::BeforeTurn ? "ACT," : "") + "RIGHT" + std::string(_action == BombAction::AfterTurn ? ",ACT" : ""));
+		send(std::string(_action == BombAction::BeforeTurn ? "ACT," : "") + "RIGHT" + std::string(_action == BombAction::AfterTurn ? ",ACT" : ""));
 	}
 	void Left(BombAction _action = BombAction::None)
 	{
-		web_socket->send(std::string(_action == BombAction::BeforeTurn ? "ACT," : "") + "LEFT" + std::string(_action == BombAction::AfterTurn ? ",ACT" : ""));
+		send(std::string(_action == BombAction::BeforeTurn ? "ACT," : "") + "LEFT" + std::string(_action == BombAction::AfterTurn ? ",ACT" : ""));
 	}
-	void Act() { web_socket->send("ACT"); }
-	void Blank() { web_socket->send(""); }
+	void Act() { send("ACT"); }
+	void Blank() { send(""); }
 
 	BombermanBlocks **get_map() { return map; }
 	uint32_t get_map_size() { return map_size; }
 	uint32_t get_player_x() { return player_x; }
 	uint32_t get_player_y() { return player_y; }
+
+private:
+	void send(std::string msg)
+	{
+		std::cout << "Sending: " << msg << std::endl;
+		web_socket->send(msg);
+	}
 };

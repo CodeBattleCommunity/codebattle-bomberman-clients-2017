@@ -25,7 +25,8 @@
       return result;
     };
     
-    var gcb = new GameClient("52.232.32.105:8080", "ab@c.ru", "123")
+    var gcb = new GameClient("epruizhw0172.moscow.epam.com:8080", "bomberman1@mail.org", "170643513159728277")
+    gcb.textArea = text
     gcb.run(function()
       {
         var done = false;
@@ -42,26 +43,6 @@
           gcb.blank();
       }
     );
-    
-    gcb.onopen = function()
-    {
-      text.value += "Соединение установлено.\n";
-    };
-
-    gcb.onclose = function(event)
-    {
-      if (event.wasClean)
-        text.value += "Соединение закрыто чисто";
-      else
-        text.value += "Обрыв соединения";
-
-      text.value += " - Код: " + event.code + ", Причина: " + event.reason + "\n";
-    };
-
-    gcb.onerror = function(error)
-    {
-      text.value += "Ошибка: " + error.message + "\n";
-    };
   </script>
 </body>
 </html>

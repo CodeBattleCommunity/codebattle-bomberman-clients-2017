@@ -8,7 +8,7 @@ namespace CodeBattleNet
 		private static void Main()
 		{
 			var r = new Random();
-			var gcb = new GameClientBomberman("52.232.32.105:8080", "ab@c.ru", "123");
+			var gcb = new GameClientBomberman("epruizhw0172.moscow.epam.com:8081", "csharp@mail.org", "1147975910246182505");
 			gcb.Run(() =>
 			{
 				var done = false;

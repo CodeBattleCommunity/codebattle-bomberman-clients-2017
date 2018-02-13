@@ -1,18 +1,16 @@
-package clientlib;
+package ru.codebattle.client.domain;
 
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum Action {
     NONE("", ""),
     BEFORE_TURN("ACT,", ""),
     AFTER_TURN("", ",ACT");
 
-    private String preTurn;
-    private String postTurn;
-
-    Action(String preTurn, String postTurn) {
-        this.preTurn = preTurn;
-        this.postTurn = postTurn;
-    }
+    private final String preTurn;
+    private final String postTurn;
 
     public String getPreTurn() {
         return preTurn;

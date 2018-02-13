@@ -1,8 +1,13 @@
-from CodeBattlePythonLibrary import GameClient
-from CodeBattlePythonLibrary import BombermanBlocks
-from CodeBattlePythonLibrary import BombAction
+from bombermanclient.CodeBattlePythonLibrary import GameClient
+from bombermanclient.CodeBattlePythonLibrary import BombermanBlocks
+from bombermanclient.CodeBattlePythonLibrary import BombAction
 import math
 import random
+import logging
+
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s',
+                    level=logging.INFO)
+
 
 def isBlock(block):
     return block in [
@@ -17,10 +22,11 @@ def isBlock(block):
         BombermanBlocks.OtherBomberman,
         BombermanBlocks.OtherBombBomberman]
 
+
 def turn(gcb):
-    done = False;
+    done = False
     val = math.ceil(random.random() * 5 - 0.5)
-        
+
     if val == 0:
         if isBlock(gcb.map[gcb.playerY - 1][gcb.playerX]) == False:
             gcb.up(BombAction.BeforeTurn)
@@ -41,8 +47,10 @@ def turn(gcb):
         gcb.act()
         done = True
     if done == False:
-        gcb.blank();
+        gcb.blank()
 
-random.seed()
-gcb = GameClient("52.232.32.105:8080", "ab@c.ru", "123")
-gcb.run(turn)
+
+if __name__ == '__main__':
+    random.seed()
+    gcb = GameClient("epruizhw0172.moscow.epam.com:8080", "bomber_py@mail.org", "20875763001194144328")
+    gcb.run(turn)
